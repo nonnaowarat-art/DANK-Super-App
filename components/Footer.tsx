@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Instagram, MapPin, Clock } from "lucide-react";
+import { Instagram, MapPin, Clock, Phone } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -15,15 +15,31 @@ export default function Footer() {
             Bangkok&apos;s premier cannabis club. AI-powered operations, human-driven
             experience. Premium flower, edibles, vapes and more.
           </p>
-          <div className="flex items-center gap-3 mt-4">
+          <div className="flex flex-col gap-2 mt-4">
             <a
-              href="https://www.instagram.com/dankbkk"
+              href="https://www.instagram.com/dankclub.official"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-dank-muted hover:text-white transition-colors"
+              className="flex items-center gap-2 text-sm text-dank-muted hover:text-white transition-colors w-fit"
             >
               <Instagram className="w-4 h-4" />
-              @dankbkk
+              @dankclub.official
+            </a>
+            <a
+              href="https://line.me/ti/p/@dankclubbkk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-dank-muted hover:text-white transition-colors w-fit"
+            >
+              <span className="w-4 h-4 flex items-center justify-center text-[10px] font-black bg-green-500 text-white rounded-sm">L</span>
+              LINE: @dankclubbkk
+            </a>
+            <a
+              href="tel:0841620610"
+              className="flex items-center gap-2 text-sm text-dank-muted hover:text-white transition-colors w-fit"
+            >
+              <Phone className="w-4 h-4" />
+              084-162-0610
             </a>
           </div>
         </div>
@@ -49,18 +65,27 @@ export default function Footer() {
 
         {/* Info */}
         <div>
-          <h3 className="text-sm font-semibold text-white mb-3">Visit Us</h3>
+          <h3 className="text-sm font-semibold text-white mb-3">Find Us</h3>
           <ul className="space-y-3">
             <li className="flex items-start gap-2 text-sm text-dank-muted">
               <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-dank-green" />
-              <span>Bangkok, Thailand</span>
+              <a
+                href="https://maps.app.goo.gl/Baq25RxznXyLc5VB7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                Phatthanakan 1st Alley
+                <br />
+                Bangkok, Thailand
+              </a>
             </li>
             <li className="flex items-start gap-2 text-sm text-dank-muted">
               <Clock className="w-4 h-4 mt-0.5 shrink-0 text-dank-green" />
               <span>
-                Mon–Sun
+                Open <span className="text-dank-green font-semibold">24 Hours</span>
                 <br />
-                12:00 – 00:00
+                Pickup &amp; Delivery
               </span>
             </li>
           </ul>

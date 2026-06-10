@@ -94,6 +94,14 @@ export default async function HomePage() {
             >
               👑 Super Exotic
             </Link>
+            <a
+              href="https://line.me/ti/p/@dankclubbkk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 border border-green-500/40 hover:border-green-500 text-green-400 font-semibold px-6 py-3 rounded-xl transition-colors"
+            >
+              💬 Order on LINE
+            </a>
           </div>
         </div>
       </section>
@@ -183,8 +191,8 @@ export default async function HomePage() {
           },
           {
             icon: <Zap className="w-6 h-6 text-dank-gold" />,
-            title: "Pick Up In-Store",
-            desc: "Order online and pick up at DANK Cannabis Club Bangkok.",
+            title: "Open 24 Hours · Pickup & Delivery",
+            desc: "Order online anytime. Pickup or delivery available 24/7 to Phatthanakan area.",
           },
           {
             icon: <Star className="w-6 h-6 text-purple-400" />,
