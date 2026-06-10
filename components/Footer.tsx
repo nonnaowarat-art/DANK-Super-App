@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Instagram, MapPin, Clock, Phone } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,10 +8,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Brand */}
         <div className="lg:col-span-2">
-          <div className="text-3xl font-black mb-3">
-            <span className="text-white">DANK</span>
-            <span className="text-dank-green">.</span>
-          </div>
+          <Image
+            src="/logo.png"
+            alt="DANK Cannabis Club"
+            width={100}
+            height={100}
+            className="h-20 w-auto object-contain mb-3"
+          />
           <p className="text-dank-muted text-sm leading-relaxed max-w-sm">
             Bangkok&apos;s premier cannabis club. AI-powered operations, human-driven
             experience. Premium flower, edibles, vapes and more.
@@ -92,9 +96,9 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-dank-border px-4 sm:px-6 py-4 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between gap-2">
+      <div className="border-t border-dank-border px-4 sm:px-6 py-4 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
         <p className="text-xs text-dank-muted">
-          © {new Date().getFullYear()} DANK Cannabis Club. All rights reserved.
+          © {new Date().getFullYear()} DANK Cannabis Club · Bangkok. All rights reserved.
         </p>
         <p className="text-xs text-dank-muted">
           For adults 20+ only. Please consume responsibly.

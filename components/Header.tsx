@@ -6,6 +6,7 @@ import { useCart } from "./CartProvider";
 import CartDrawer from "./CartDrawer";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 const NAV = [
   { label: "Shop", href: "/shop" },
@@ -25,14 +26,15 @@ export default function Header() {
       <header className="sticky top-0 z-40 border-b border-dank-border bg-dank-dark/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span className="text-2xl font-black tracking-tight">
-              <span className="text-white">DANK</span>
-              <span className="text-dank-green">.</span>
-            </span>
-            <span className="hidden sm:block text-xs text-dank-muted tracking-widest uppercase">
-              Cannabis Club
-            </span>
+          <Link href="/" className="flex items-center shrink-0">
+            <Image
+              src="/logo.png"
+              alt="DANK Cannabis Club"
+              width={64}
+              height={64}
+              className="h-12 w-auto object-contain"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}

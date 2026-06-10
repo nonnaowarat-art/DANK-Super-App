@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, LogIn } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -39,11 +40,14 @@ export default function LoginPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="text-4xl font-black mb-1">
-            <span className="text-white">DANK</span>
-            <span className="text-dank-green">.</span>
-          </div>
+        <div className="flex flex-col items-center mb-8">
+          <Image
+            src="/logo.png"
+            alt="DANK Cannabis Club"
+            width={120}
+            height={120}
+            className="h-24 w-auto object-contain mb-2"
+          />
           <p className="text-dank-muted text-sm">Sign in to your account</p>
         </div>
 

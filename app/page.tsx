@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Zap, Star, Shield } from "lucide-react";
+// Logo imported via /public/logo.png
 import { prisma } from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/lib/types";
@@ -64,23 +65,25 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-dank-card to-dank-dark border-b border-dank-border">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(34,197,94,0.08),transparent_60%)]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-20 md:py-32 flex flex-col items-start gap-6">
-          <div className="flex items-center gap-2 text-xs font-semibold text-dank-green bg-dank-green/10 border border-dank-green/20 px-3 py-1.5 rounded-full">
-            <Zap className="w-3.5 h-3.5" />
-            Bangkok&apos;s #1 Cannabis Club
-          </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-none tracking-tight max-w-3xl">
-            <span className="text-white">Premium</span>
-            <br />
-            <span className="text-dank-green">Cannabis</span>
-            <br />
-            <span className="text-white">Bangkok</span>
-          </h1>
-          <p className="text-lg text-gray-400 max-w-lg leading-relaxed">
-            Super Exotic, EXO, Top Shelf & Mid Grade flower. Edibles, vapes,
-            concentrates and accessories — all in one place.
-          </p>
-          <div className="flex flex-wrap gap-3">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-28 flex flex-col md:flex-row items-start md:items-center gap-10">
+          {/* Text side */}
+          <div className="flex flex-col items-start gap-6 flex-1">
+            <div className="flex items-center gap-2 text-xs font-semibold text-dank-green bg-dank-green/10 border border-dank-green/20 px-3 py-1.5 rounded-full">
+              <Zap className="w-3.5 h-3.5" />
+              Bangkok&apos;s #1 Cannabis Club · Open 24 hrs
+            </div>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-none tracking-tight max-w-2xl">
+              <span className="text-white">Premium</span>
+              <br />
+              <span className="text-dank-green">Cannabis</span>
+              <br />
+              <span className="text-white">Bangkok</span>
+            </h1>
+            <p className="text-lg text-gray-400 max-w-lg leading-relaxed">
+              Super Exotic, EXO, Top Shelf &amp; Mid Grade flower. Edibles, vapes,
+              concentrates and accessories — all in one place.
+            </p>
+            <div className="flex flex-wrap gap-3">
             <Link
               href="/shop"
               className="flex items-center gap-2 bg-dank-green hover:bg-green-400 text-black font-bold px-6 py-3 rounded-xl transition-colors"
@@ -102,6 +105,19 @@ export default async function HomePage() {
             >
               💬 Order on LINE
             </a>
+          </div>
+          </div>
+
+          {/* Logo character — right side */}
+          <div className="hidden md:flex shrink-0 items-center justify-center">
+            <Image
+              src="/logo.png"
+              alt="DANK Cannabis Club"
+              width={320}
+              height={320}
+              className="w-64 lg:w-80 h-auto object-contain drop-shadow-2xl"
+              priority
+            />
           </div>
         </div>
       </section>
