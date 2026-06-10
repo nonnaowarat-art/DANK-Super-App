@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartProvider from "@/components/CartProvider";
+import SessionProvider from "@/components/SessionProvider";
 
 export const metadata: Metadata = {
   title: "DANK Cannabis Club | Bangkok",
@@ -19,11 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-dank-dark text-white min-h-screen flex flex-col">
-        <CartProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </CartProvider>
+        <SessionProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </CartProvider>
+        </SessionProvider>
       </body>
     </html>
   );

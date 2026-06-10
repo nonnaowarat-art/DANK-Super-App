@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, User } from "lucide-react";
 import { useCart } from "./CartProvider";
 import CartDrawer from "./CartDrawer";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 const NAV = [
   { label: "Shop", href: "/shop" },
@@ -17,6 +18,7 @@ const NAV = [
 export default function Header() {
   const { count, isOpen, openCart, closeCart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <>
@@ -46,7 +48,29 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            {/* Account / Login */}
+            {session?.user ? (
+              <Link
+                href="/account"
+                className="flex items-center gap-1.5 p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-300 hover:text-white"
+                aria-label="My account"
+              >
+                <User className="w-5 h-5" />
+                <span className="hidden sm:block text-xs font-medium">
+                  Account
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-gray-300 hover:text-white border border-dank-border hover:border-white/20 px-3 py-2 rounded-lg transition-colors"
+              >
+                <User className="w-3.5 h-3.5" />
+                Sign In
+              </Link>
+            )}
+
             {/* Cart */}
             <button
               onClick={openCart}
@@ -90,6 +114,27 @@ export default function Header() {
                   {n.label}
                 </Link>
               ))}
+              <div className="border-t border-dank-border mt-1 pt-2">
+                {session?.user ? (
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileOpen(false)}
+                    className="py-2 text-sm text-dank-green hover:text-green-400 transition-colors flex items-center gap-2"
+                  >
+                    <User className="w-4 h-4" />
+                    My Account
+                  </Link>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="py-2 text-sm text-gray-300 hover:text-white transition-colors flex items-center gap-2"
+                  >
+                    <User className="w-4 h-4" />
+                    Sign In / Register
+                  </Link>
+                )}
+              </div>
             </nav>
           </div>
         )}
