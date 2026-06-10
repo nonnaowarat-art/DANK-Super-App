@@ -6,17 +6,22 @@ import { prisma } from "@/lib/prisma";
 import { Product, GRADE_COLORS, STRAIN_COLORS } from "@/lib/types";
 import AddToCartSection from "@/components/AddToCartSection";
 import ProductCard from "@/components/ProductCard";
+import { DEMO_PRODUCTS } from "@/lib/demo-data";
 
 interface Props {
   params: { handle: string };
 }
 
 async function getProduct(handle: string): Promise<Product | null> {
-  const product = await prisma.product.findUnique({
-    where: { handle },
-    include: { variants: true },
-  });
-  return product as unknown as Product | null;
+  try {
+    const product = await prisma.product.findUnique({
+      where: { handle },
+      include: { variants: true },
+    });
+    return product as unknown as Product | null;
+  } catch {
+    return DEMO_PRODUCTS.find((p) => p.handle === handle) ?? null;
+  }
 }
 
 async function getRelated(
@@ -24,16 +29,22 @@ async function getRelated(
   grade: string,
   currentId: string
 ): Promise<Product[]> {
-  const products = await prisma.product.findMany({
-    where: {
-      OR: [{ grade }, { category }],
-      NOT: { id: currentId },
-    },
-    take: 4,
-    orderBy: { thc: "desc" },
-    include: { variants: true },
-  });
-  return products as unknown as Product[];
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        OR: [{ grade }, { category }],
+        NOT: { id: currentId },
+      },
+      take: 4,
+      orderBy: { thc: "desc" },
+      include: { variants: true },
+    });
+    return products as unknown as Product[];
+  } catch {
+    return DEMO_PRODUCTS.filter(
+      (p) => p.id !== currentId && (p.grade === grade || p.category === category)
+    ).slice(0, 4);
+  }
 }
 
 export default async function ProductPage({ params }: Props) {
