@@ -6,14 +6,20 @@ import { prisma } from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/lib/types";
 
+import { DEMO_PRODUCTS } from "@/lib/demo-data";
+
 async function getFeatured(): Promise<Product[]> {
-  const products = await prisma.product.findMany({
-    where: { featured: true },
-    take: 8,
-    orderBy: { thc: "desc" },
-    include: { variants: true },
-  });
-  return products as unknown as Product[];
+  try {
+    const products = await prisma.product.findMany({
+      where: { featured: true },
+      take: 8,
+      orderBy: { thc: "desc" },
+      include: { variants: true },
+    });
+    return products as unknown as Product[];
+  } catch {
+    return DEMO_PRODUCTS.filter((p) => p.featured);
+  }
 }
 
 async function getByGrade(grade: string, limit = 4): Promise<Product[]> {

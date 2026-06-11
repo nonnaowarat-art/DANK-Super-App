@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import FilterBar from "@/components/FilterBar";
 import { Product } from "@/lib/types";
+import { DEMO_PRODUCTS } from "@/lib/demo-data";
 
 interface PageProps {
   searchParams: {
@@ -31,18 +32,27 @@ async function getProducts(searchParams: PageProps["searchParams"]) {
   else if (sort === "thc_desc") orderBy = { thc: "desc" };
   else if (sort === "name_asc") orderBy = { name: "asc" };
 
-  const [products, total] = await Promise.all([
-    prisma.product.findMany({
-      where,
-      orderBy,
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: { variants: true },
-    }),
-    prisma.product.count({ where }),
-  ]);
-
-  return { products: products as unknown as Product[], total, page };
+  try {
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        orderBy,
+        skip: (page - 1) * PAGE_SIZE,
+        take: PAGE_SIZE,
+        include: { variants: true },
+      }),
+      prisma.product.count({ where }),
+    ]);
+    return { products: products as unknown as Product[], total, page };
+  } catch {
+    const filtered = DEMO_PRODUCTS.filter((p) => {
+      if (category && p.category !== category) return false;
+      if (grade && p.grade !== grade) return false;
+      if (strain && p.strainType !== strain) return false;
+      return true;
+    });
+    return { products: filtered, total: filtered.length, page: 1 };
+  }
 }
 
 export default async function ShopPage({ searchParams }: PageProps) {
