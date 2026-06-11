@@ -95,7 +95,7 @@ export default function AddToCartSection({ product }: Props) {
       </div>
 
       <p className="text-xs text-dank-muted">
-        🏪 Pick up at DANK Cannabis Club · Bangkok
+        🏪 Pickup &amp; 🛵 Delivery · Open 24 hrs · Phatthanakan, Bangkok
       </p>
     </div>
   );

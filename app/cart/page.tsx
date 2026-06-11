@@ -10,6 +10,8 @@ interface FormData {
   name: string;
   email: string;
   phone: string;
+  fulfillment: "PICKUP" | "DELIVERY";
+  address: string;
   notes: string;
 }
 
@@ -19,6 +21,8 @@ export default function CartPage() {
     name: "",
     email: "",
     phone: "",
+    fulfillment: "PICKUP",
+    address: "",
     notes: "",
   });
   const [loading, setLoading] = useState(false);
@@ -47,6 +51,8 @@ export default function CartPage() {
           customerName: form.name,
           email: form.email,
           phone: form.phone,
+          fulfillment: form.fulfillment,
+          address: form.fulfillment === "DELIVERY" ? form.address : "",
           notes: form.notes,
           items: orderItems,
         }),
@@ -76,7 +82,9 @@ export default function CartPage() {
           Thanks for your order. We&apos;ll confirm via WhatsApp or LINE shortly.
         </p>
         <p className="text-sm text-dank-muted mb-8">
-          Pick up at DANK Cannabis Club · Bangkok
+          We&apos;ll confirm via LINE or phone shortly.
+          <br />
+          Phatthanakan 1st Alley · Open 24 hrs
         </p>
         <Link
           href="/shop"
@@ -232,7 +240,7 @@ export default function CartPage() {
                 </span>
               </div>
               <p className="text-xs text-dank-muted mt-2">
-                Pay on pickup · No online payment required
+                Pay on pickup or delivery · Open 24 hrs
               </p>
             </div>
 
@@ -240,6 +248,35 @@ export default function CartPage() {
             <div className="bg-dank-card border border-dank-border rounded-2xl p-5">
               <h2 className="font-bold text-base mb-4">Your Details</h2>
               <form onSubmit={handleSubmit} className="space-y-3">
+
+                {/* Fulfillment toggle */}
+                <div>
+                  <label className="text-xs text-dank-muted block mb-2 uppercase tracking-wider">
+                    Fulfillment
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(["PICKUP", "DELIVERY"] as const).map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => setForm((f) => ({ ...f, fulfillment: opt }))}
+                        className={`py-2.5 rounded-xl text-sm font-semibold border transition-all ${
+                          form.fulfillment === opt
+                            ? "bg-dank-green/10 border-dank-green text-dank-green"
+                            : "border-dank-border text-dank-muted hover:border-dank-green/40"
+                        }`}
+                      >
+                        {opt === "PICKUP" ? "🏪 Pickup" : "🛵 Delivery"}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-dank-muted mt-1.5">
+                    {form.fulfillment === "PICKUP"
+                      ? "Phatthanakan 1st Alley · Open 24 hrs"
+                      : "Delivery available 24 hrs · confirm area via LINE"}
+                  </p>
+                </div>
+
                 <div>
                   <label className="text-xs text-dank-muted block mb-1">
                     Full Name *
@@ -251,6 +288,20 @@ export default function CartPage() {
                       setForm((f) => ({ ...f, name: e.target.value }))
                     }
                     placeholder="Your name"
+                    className="w-full bg-black border border-dank-border rounded-xl px-3 py-2.5 text-sm text-white placeholder-dank-muted focus:border-dank-green outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-dank-muted block mb-1">
+                    Phone / LINE *
+                  </label>
+                  <input
+                    required
+                    value={form.phone}
+                    onChange={(e) =>
+                      setForm((f) => ({ ...f, phone: e.target.value }))
+                    }
+                    placeholder="08X-XXX-XXXX or LINE ID"
                     className="w-full bg-black border border-dank-border rounded-xl px-3 py-2.5 text-sm text-white placeholder-dank-muted focus:border-dank-green outline-none transition-colors"
                   />
                 </div>
@@ -269,20 +320,26 @@ export default function CartPage() {
                     className="w-full bg-black border border-dank-border rounded-xl px-3 py-2.5 text-sm text-white placeholder-dank-muted focus:border-dank-green outline-none transition-colors"
                   />
                 </div>
-                <div>
-                  <label className="text-xs text-dank-muted block mb-1">
-                    Phone / LINE *
-                  </label>
-                  <input
-                    required
-                    value={form.phone}
-                    onChange={(e) =>
-                      setForm((f) => ({ ...f, phone: e.target.value }))
-                    }
-                    placeholder="+66 8X XXX XXXX"
-                    className="w-full bg-black border border-dank-border rounded-xl px-3 py-2.5 text-sm text-white placeholder-dank-muted focus:border-dank-green outline-none transition-colors"
-                  />
-                </div>
+
+                {/* Delivery address */}
+                {form.fulfillment === "DELIVERY" && (
+                  <div>
+                    <label className="text-xs text-dank-muted block mb-1">
+                      Delivery Address *
+                    </label>
+                    <textarea
+                      required
+                      rows={2}
+                      value={form.address}
+                      onChange={(e) =>
+                        setForm((f) => ({ ...f, address: e.target.value }))
+                      }
+                      placeholder="Full address including building, floor, room..."
+                      className="w-full bg-black border border-dank-border rounded-xl px-3 py-2.5 text-sm text-white placeholder-dank-muted focus:border-dank-green outline-none transition-colors resize-none"
+                    />
+                  </div>
+                )}
+
                 <div>
                   <label className="text-xs text-dank-muted block mb-1">
                     Notes (optional)
@@ -309,6 +366,11 @@ export default function CartPage() {
                 >
                   {loading ? "Placing order..." : `Place Order · ฿${total.toLocaleString()}`}
                 </button>
+
+                <p className="text-xs text-dank-muted text-center">
+                  Pay on {form.fulfillment === "PICKUP" ? "pickup" : "delivery"} · We&apos;ll confirm via LINE{" "}
+                  <a href="https://line.me/ti/p/@dankclubbkk" target="_blank" rel="noopener noreferrer" className="text-dank-green">@dankclubbkk</a>
+                </p>
               </form>
             </div>
           </div>

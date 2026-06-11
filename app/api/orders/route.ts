@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { customerName, email, phone, notes, items } = body;
+    const { customerName, email, phone, fulfillment, address, notes, items } = body;
 
     if (!customerName || !email || !phone || !items?.length) {
       return NextResponse.json(
@@ -25,11 +25,12 @@ export async function POST(req: NextRequest) {
         email,
         phone,
         notes: notes ?? "",
+        address: address ?? "",
         subtotal,
         tax: 0,
         total: subtotal,
         status: "PENDING",
-        fulfillment: "PICKUP",
+        fulfillment: fulfillment === "DELIVERY" ? "DELIVERY" : "PICKUP",
         paymentMethod: "PAY_ON_PICKUP",
         paymentStatus: "COLLECT_ON_PICKUP",
         items: {
