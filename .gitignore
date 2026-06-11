@@ -17,3 +17,6 @@ prisma/generated/
 .DS_Store
 *.log
 tsconfig.tsbuildinfo
+
+# local scripts (may contain credentials)
+scripts/
