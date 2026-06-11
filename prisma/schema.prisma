@@ -8,16 +8,25 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  passwordHash  String?
-  createdAt     DateTime  @default(now())
-  accounts      Account[]
-  sessions      Session[]
-  orders        Order[]
+  id              String    @id @default(cuid())
+  name            String?
+  email           String?   @unique
+  phone           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  passwordHash    String?
+  // Patient card
+  patientCard     String    @default("NONE")  // NONE | PENDING | VERIFIED
+  patientCardImg  String?
+  // Loyalty
+  loyaltyPoints   Int       @default(0)
+  totalSpent      Float     @default(0)
+  role            String    @default("CUSTOMER")  // CUSTOMER | ADMIN
+  createdAt       DateTime  @default(now())
+  accounts        Account[]
+  sessions        Session[]
+  orders          Order[]
+  loyaltyLogs     LoyaltyTransaction[]
 }
 
 model Account {
@@ -54,25 +63,47 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model LoyaltyTransaction {
+  id        String   @id @default(cuid())
+  userId    String
+  points    Int
+  reason    String
+  orderId   String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Product {
-  id          String      @id @default(cuid())
+  id          String    @id @default(cuid())
+  handle      String    @unique
   name        String
   description String
   price       Float
   category    String
+  grade       String    @default("")
   imageUrl    String?
-  tags        String      @default("")
-  stock       Int         @default(0)
+  tags        String    @default("")
+  stock       Int       @default(99)
   strainType  String?
   thc         Float?
   cbd         Float?
-  createdAt   DateTime    @default(now())
+  featured    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
   orderItems  OrderItem[]
+  variants    ProductVariant[]
+}
+
+model ProductVariant {
+  id        String  @id @default(cuid())
+  productId String
+  label     String
+  price     Float
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Order {
   id              String      @id @default(cuid())
-  userId          String
+  userId          String?
   status          String      @default("PENDING")
   fulfillment     String      @default("PICKUP")
   paymentMethod   String      @default("PAY_ON_PICKUP")
@@ -84,10 +115,12 @@ model Order {
   address         String?
   notes           String?
   subtotal        Float
-  tax             Float
+  tax             Float       @default(0)
   total           Float
+  pointsEarned    Int         @default(0)
+  pointsRedeemed  Int         @default(0)
   createdAt       DateTime    @default(now())
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   items           OrderItem[]
 }
 
@@ -98,6 +131,7 @@ model OrderItem {
   name      String
   price     Float
   quantity  Int
+  variant   String  @default("")
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
 }
