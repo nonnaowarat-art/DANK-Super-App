@@ -16,3 +16,4 @@ prisma/generated/
 # misc
 .DS_Store
 *.log
+tsconfig.tsbuildinfo
