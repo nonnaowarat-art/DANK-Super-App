@@ -7,6 +7,9 @@ import ProductCard from "@/components/ProductCard";
 import { Product } from "@/lib/types";
 
 import { DEMO_PRODUCTS } from "@/lib/demo-data";
+import { getPersonalRecommendations } from "@/lib/recommendations";
+
+export const dynamic = "force-dynamic";
 
 async function getFeatured(): Promise<Product[]> {
   try {
@@ -64,7 +67,10 @@ const GRADE_SECTIONS = [
 ];
 
 export default async function HomePage() {
-  const featured = await getFeatured();
+  const [featured, picked] = await Promise.all([
+    getFeatured(),
+    getPersonalRecommendations(),
+  ]);
 
   return (
     <div>
@@ -147,6 +153,25 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* Picked for you — personal recommendations */}
+      {picked.products.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold">
+              ✨ Picked for You{picked.name ? `, ${picked.name}` : ""}
+            </h2>
+            <p className="text-sm text-dank-muted mt-1">
+              Based on your favorite strains and past orders
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {picked.products.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Featured products */}
       {featured.length > 0 && (

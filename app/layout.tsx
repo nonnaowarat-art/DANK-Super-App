@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartProvider from "@/components/CartProvider";
 import SessionProvider from "@/components/SessionProvider";
+import BudtenderChat from "@/components/BudtenderChat";
 
 export const metadata: Metadata = {
   title: "DANK Cannabis Club | Bangkok",
@@ -25,6 +26,7 @@ export default function RootLayout({
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
+            <BudtenderChat />
           </CartProvider>
         </SessionProvider>
       </body>
