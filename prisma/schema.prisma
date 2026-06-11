@@ -101,3 +101,58 @@ model OrderItem {
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product   Product @relation(fields: [productId], references: [id])
 }
+
+// ─── LINE Bot Models ───────────────────────────────────────────────
+
+model LineGroup {
+  id          String         @id @default(cuid())
+  lineGroupId String         @unique
+  name        String
+  groupType   String         // STOCK_CHECK | KPI_SHIFT
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  stockEntries StockEntry[]
+  shiftKPIs   ShiftKPI[]
+  summaries   GroupSummary[]
+}
+
+model StockEntry {
+  id           String    @id @default(cuid())
+  groupId      String
+  group        LineGroup @relation(fields: [groupId], references: [id])
+  productName  String
+  quantity     Int
+  unit         String    @default("units")
+  status       String    @default("OK") // OK | LOW | OUT
+  notes        String?
+  reportedBy   String
+  reporterName String
+  entryDate    DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+}
+
+model ShiftKPI {
+  id            String    @id @default(cuid())
+  groupId       String
+  group         LineGroup @relation(fields: [groupId], references: [id])
+  shiftDate     DateTime
+  shiftType     String    @default("GENERAL") // MORNING | AFTERNOON | NIGHT | GENERAL
+  staffName     String
+  totalSales    Float     @default(0)
+  customerCount Int       @default(0)
+  topProducts   String?
+  notes         String?
+  rawMessage    String?   @db.Text
+  createdAt     DateTime  @default(now())
+}
+
+model GroupSummary {
+  id          String    @id @default(cuid())
+  groupId     String
+  group       LineGroup @relation(fields: [groupId], references: [id])
+  summaryType String    // STOCK_DAILY | KPI_SHIFT
+  summaryDate DateTime
+  content     String    @db.Text
+  sentToLine  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+}
